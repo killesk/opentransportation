@@ -5,7 +5,7 @@
 
 #------------------------------ Global Project Variables -------------------------------#
 
-var_project_name=opentransport_db_data
+var_project_name=opentransportation_db_data
 var_project_location=/home/killesk/workspace/opentransportationserver
 var_project_docker_version=18
 
@@ -17,7 +17,7 @@ var_docker_name_mysql=opentransportation_mysql
 #---------------------------------- MYSQL Variables ------------------------------------#
 
 var_mysql_version=5.7
-var_mysql_root_password=opentransportation_db
+var_mysql_root_password=opentransportation_db_root_password
 var_mysql_database=opentransportation_db
 var_mysql_user=opentransportation_dbuser
 var_mysql_password=opentransportation_dbpassword
@@ -30,7 +30,7 @@ function start() {
   echo "Starting server, please wait...."
   docker run \
     -e MYSQL_ROOT_PASSWORD=$var_mysql_root_password \
-    -e MYSQL_DATABASE=$opentransport_db \
+    -e MYSQL_DATABASE=$var_mysql_database \
     -e MYSQL_USER=$var_mysql_user \
     -e MYSQL_PASSWORD=$var_mysql_password \
     --mount type=volume,src=$opentransport_db,dst=$var_project_location \
