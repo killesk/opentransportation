@@ -3,6 +3,8 @@
 #date:2018-04-29
 #purpose:This should start the server and load up the database for open transport
 
+#Maven should be installed
+
 #------------------------------ Global Project Variables -------------------------------#
 
 var_project_name=opentransportation_db_data
@@ -28,6 +30,26 @@ var_mysql_data_dump_file_name=db_dump.sql
 #-------------------------------------- Methods ----------------------------------------#
 
 function start() {
+  startDatabase
+}
+
+function stop() {
+  printf "Stopping server\n"
+  docker stop $var_docker_name_mysql
+  docker rm $var_docker_name_mysql
+}
+
+function restart() {
+  stop
+  start
+}
+
+function_exists() {
+  declare -f -F $1 > /dev/null
+  return $?
+}
+
+function startDatabase() {
   loopTime=1
   printf "Starting server, please wait....\n"
   container_id=$(docker run \
@@ -52,22 +74,6 @@ function start() {
   
   printf "\nImporting data..."
   docker exec -i $var_docker_name_mysql mysql -u$var_mysql_user -p$var_mysql_password < $var_mysql_data_dump_file_name  $var_mysql_database
-}
-
-function stop() {
-  printf "Stopping server\n"
-  docker stop $var_docker_name_mysql
-  docker rm $var_docker_name_mysql
-}
-
-function restart() {
-  stop
-  start
-}
-
-function_exists() {
-  declare -f -F $1 > /dev/null
-  return $?
 }
 
 
