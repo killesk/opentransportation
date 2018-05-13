@@ -22,13 +22,15 @@ var_mysql_database=opentransportation_db
 var_mysql_user=opentransportation_dbuser
 var_mysql_password=opentransportation_dbpassword
 var_mysql_port=3306
+var_mysql_data_dump_file_name=db_dump.sql
 
 
 #-------------------------------------- Methods ----------------------------------------#
 
 function start() {
-  echo "Starting server, please wait...."
-  docker run \
+  loopTime=1
+  printf "Starting server, please wait....\n"
+  container_id=$(docker run \
     -e MYSQL_ROOT_PASSWORD=$var_mysql_root_password \
     -e MYSQL_DATABASE=$var_mysql_database \
     -e MYSQL_USER=$var_mysql_user \
@@ -37,11 +39,23 @@ function start() {
 	--name $var_docker_name_mysql \
     -p $var_mysql_port:$var_mysql_port \
     -d \
-    mysql:$var_mysql_version
+    mysql:$var_mysql_version)
+
+  docker_ip=$(docker inspect $container_id | grep -w \"IPAddress\" | head -n 1 | cut -d '"' -f 4)
+
+  #I need to wait for the mysql to load up before I import the database
+  printf "Waiting for MySQL to start on 3306...\n"
+  while ! nc -z $docker_ip 3306; do
+    sleep 1
+    printf "."
+  done
+  
+  printf "\nImporting data..."
+  docker exec -i $var_docker_name_mysql mysql -u$var_mysql_user -p$var_mysql_password < $var_mysql_data_dump_file_name  $var_mysql_database
 }
 
 function stop() {
-  echo "Stopping server"
+  printf "Stopping server\n"
   docker stop $var_docker_name_mysql
   docker rm $var_docker_name_mysql
 }
@@ -63,13 +77,13 @@ docker_version_full_string="$(docker version --format '{{.Server.Version}}')"
 docker_version=${docker_version_full_string:0:2}
 if [ "$docker_version" != "$var_project_docker_version" ]
 then
-  echo "Docker version invalid. Please use version -> $var_project_docker_version"
+  printf "Docker version invalid. Please use version -> $var_project_docker_version \n"
   exit
 fi
 
 if [ $# -lt 1 ]
 then
-  echo "Usage : $0 start|stop|restart "
+  printf "Usage : $0 start|stop|restart "
   exit
 fi
 
@@ -82,6 +96,6 @@ case "$1" in
           ;;
   restart)  function_exists restart && restart
           ;;
-  *)      echo "Invalid command - Valid->start|stop|restart"
+  *)      printf "Invalid command - Valid->start|stop|restart"
           ;;
 esac
