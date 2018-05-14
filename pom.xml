@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.killesk</groupId>
+    <artifactId>opentransport</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <name>opentransport</name>
+    <packaging>pom</packaging>
+    
+	<parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.2.RELEASE</version>
+    </parent>
+	
+    <properties>
+        <java.version>1.8</java.version>
+		<commons-lang3.version>3.4</commons-lang3.version>
+		<commons-io.version>2.4</commons-io.version>
+		<rest-assured.version>2.9.0</rest-assured.version>
+        <oauth.version>2.2.1.RELEASE</oauth.version>
+    </properties>
+
+    <modules>
+        <module>server</module>
+    </modules>
+
+</project>
