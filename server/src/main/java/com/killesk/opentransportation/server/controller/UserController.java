@@ -1,9 +1,9 @@
-package controller;
+package com.killesk.opentransportation.server.controller;
 
+import com.killesk.opentransportation.server.repo.model.User;
+import com.killesk.opentransportation.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import repo.model.User;
-import service.UserService;
 
 import java.util.List;
 

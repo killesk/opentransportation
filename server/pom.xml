@@ -10,7 +10,7 @@
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.killesk</groupId>
+
     <artifactId>server</artifactId>
     <version>${version}</version>
 
@@ -53,23 +53,19 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>1.0.0</version>
+                <version>2.0.2.RELEASE</version>
                 <configuration>
-                    <imageName>example</imageName>
-                    <dockerDirectory>docker</dockerDirectory>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.jar</include>
-                        </resource>
-                    </resources>
+                    <jvmArguments>
+                        -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
+                    </jvmArguments>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

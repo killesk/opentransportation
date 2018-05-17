@@ -1,14 +1,15 @@
-package service;
+package com.killesk.opentransportation.server.service;
 
+import com.killesk.opentransportation.server.repo.UserRepository;
+import com.killesk.opentransportation.server.repo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import repo.UserRepository;
-import repo.model.User;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements com.killesk.opentransportation.server.service.UserService {
+
     @Autowired
     private UserRepository repository;
 

@@ -34,7 +34,8 @@ var_registry_port=5000
 
 function start() {
   	startDatabase
-  	startDockerRegistry
+  	#startDockerRegistry
+	buildServerImage
 }
 
 function stop() {
@@ -82,9 +83,16 @@ function startDatabase() {
 	docker exec -i $var_docker_name_mysql mysql -u$var_mysql_user -p$var_mysql_password < $var_mysql_data_dump_file_name  $var_mysql_database
 }
 
-startDockerRegistry() {
+function startDockerRegistry() {
 	printf "Starting docker registry, please wait....\n"
 	docker run -d -p $var_registry_port:$var_registry_port  --rm  --name $var_docker_name_registry $var_docker_name_registry:$var_docker_name_registry_version
+}
+
+function buildServerImage() {
+	cd ./server
+	mvn clean install package
+	docker build -t server .
+	cd ../
 }
 
 

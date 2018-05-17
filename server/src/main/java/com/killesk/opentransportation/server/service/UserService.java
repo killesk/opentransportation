@@ -1,6 +1,7 @@
-package service;
+package com.killesk.opentransportation.server.service;
 
-import repo.model.User;
+
+import com.killesk.opentransportation.server.repo.model.User;
 
 import java.util.List;
 
