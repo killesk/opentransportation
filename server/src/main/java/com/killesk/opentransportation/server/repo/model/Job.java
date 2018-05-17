@@ -12,20 +12,22 @@ import java.util.Date;
 @EqualsAndHashCode
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "job")
+public class Job {
 
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer user_id;
+    private Integer job_id;
     @Column
-    private String email;
-    @Column
-    private Date created;
+    private String name;
     @Column
     private Date last_updated;
     @Column
-    private Integer type;
+    private Date created;
+    @Column
+    private Double collection_point;
+    @Column
+    private Double delivery_point;
 
 }
