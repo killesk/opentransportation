@@ -24,13 +24,12 @@ DROP TABLE IF EXISTS `job`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `job` (
   `job_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `collection_point` double DEFAULT NULL,
-  `delivery_point` double DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `last_updated` datetime NOT NULL,
+  `name` varchar(255) NOT NULL,
   PRIMARY KEY (`job_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,12 +77,12 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(45) NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `type` int(11) NOT NULL,
+  `created` datetime DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,4 +103,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-29 18:21:35
+-- Dump completed on 2018-05-21 15:10:59

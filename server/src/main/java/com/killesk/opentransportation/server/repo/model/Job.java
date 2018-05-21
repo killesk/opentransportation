@@ -26,8 +26,6 @@ public class Job {
     @Column
     private Date created;
     @Column
-    private Double collection_point;
-    @Column
-    private Double delivery_point;
+    private Integer user_id;
 
 }

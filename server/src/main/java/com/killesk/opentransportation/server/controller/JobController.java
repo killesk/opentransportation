@@ -19,6 +19,7 @@ public class JobController {
         return jobService.create(job);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path = {"/{id}"})
     public Job findOne(@PathVariable("id") int id){
         return jobService.findById(id);
@@ -34,6 +35,7 @@ public class JobController {
         jobService.delete(id);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping
     public List<Job> findAll(){
         return jobService.findAll();
