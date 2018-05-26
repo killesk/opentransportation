@@ -10,13 +10,15 @@
 var_project_name=opentransportation_db_data
 var_project_location=/home/killesk/workspace/opentransportationserver/
 var_project_docker_version=18
+var_project_profile=dev
 
 #--------------------------------- Dovker Variables ------------------------------------#
 
 var_docker_name_mysql=mysql
 var_docker_name_mysql_version=5.7
-var_docker_name_registry=registry
-var_docker_name_registry_version=2
+var_docker_name_server=server
+var_docker_image_server_image=server_image
+var_docker_name_server_version=latest
 
 
 #---------------------------------- MYSQL Variables ------------------------------------#
@@ -28,21 +30,27 @@ var_mysql_password=opentransportation_dbpassword
 var_mysql_port=3306
 var_mysql_data_dump_file_name=./server/db_dump.sql
 
+
 #---------------------------------- registry Variables ------------------------------------#
 var_registry_port=5000
+
+
 #-------------------------------------- Methods ----------------------------------------#
 
 function start() {
-  	startDatabase
-  	#startDockerRegistry
-	buildServerImage
+  	printf "\n\n\n\n\n\n\n#####################start()\n\n\n\n\n\n\n\n"
+  	startDatabase	
+	compileAndPackageProject
+	buildServerDockerImage
+	startServer
 }
 
 function stop() {
+  	printf "\n\n\n\n\n\n\n#####################stop()\n\n\n\n\n\n\n\n"
   	printf "Stopping mysql\n"  
   	docker stop $var_docker_name_mysql
-  	printf "Stopping registry\n"  
-  	docker stop $var_docker_name_registry
+  	docker rm -f $var_docker_name_server	
+	clean
 }
 
 function restart() {
@@ -56,8 +64,8 @@ function_exists() {
 }
 
 function startDatabase() {
+  	printf "\n\n\n\n\n\n\n#####################startDatabase()\n\n\n\n\n\n\n\n"
   	loopTime=1
-  	printf "Starting mysql, please wait....\n"
   	container_id=$(docker run \
     	-e MYSQL_ROOT_PASSWORD=$var_mysql_root_password \
     	-e MYSQL_DATABASE=$var_mysql_database \
@@ -83,16 +91,28 @@ function startDatabase() {
 	docker exec -i $var_docker_name_mysql mysql -u$var_mysql_user -p$var_mysql_password < $var_mysql_data_dump_file_name  $var_mysql_database
 }
 
-function startDockerRegistry() {
-	printf "Starting docker registry, please wait....\n"
-	docker run -d -p $var_registry_port:$var_registry_port  --rm  --name $var_docker_name_registry $var_docker_name_registry:$var_docker_name_registry_version
+function clean() {
+  	printf "\n\n\n\n\n\n\n#####################clean()\n\n\n\n\n\n\n\n"
+	docker rmi -f $var_docker_image_server_image
 }
 
-function buildServerImage() {
+function compileAndPackageProject() {
+  	printf "\n\n\n\n\n\n\n#####################compileAndPackageProject()\n\n\n\n\n\n\n\n"
+	mvn compile package
+}
+
+function buildServerDockerImage() {
+  	printf "\n\n\n\n\n\n\n#####################buildServerDockerImage()\n\n\n\n\n\n\n\n"
 	cd ./server
 	mvn clean install package
-	docker build -t server .
+	docker build -t $var_docker_image_server_image .
 	cd ../
+}
+
+function startServer() {
+  	printf "\n\n\n\n\n\n\n#####################startServer()\n\n\n\n\n\n\n\n\n"
+	container_id=$(docker run -d --name $var_docker_name_server $var_docker_image_server_image:$var_docker_name_server_version)
+  	printf "server container ID $container_id \n"
 }
 
 
