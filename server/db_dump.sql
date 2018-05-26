@@ -1,6 +1,8 @@
+CREATE DATABASE  IF NOT EXISTS `opentransportation_db` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `opentransportation_db`;
 -- MySQL dump 10.13  Distrib 5.7.20, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: opentransportation_db
+-- Host: 172.17.0.2    Database: opentransportation_db
 -- ------------------------------------------------------
 -- Server version	5.7.22
 
@@ -24,12 +26,12 @@ DROP TABLE IF EXISTS `job`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `job` (
   `job_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `created` datetime NOT NULL,
-  `last_updated` datetime NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `name` varchar(255) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`job_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,34 +40,36 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
+INSERT INTO `job` VALUES (1,'2018-05-26 13:00:10','2018-05-26 13:00:10','Very first job',1);
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `job-history`
+-- Table structure for table `job_history`
 --
 
-DROP TABLE IF EXISTS `job-history`;
+DROP TABLE IF EXISTS `job_history`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `job-history` (
-  `job-history_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `job_history` (
+  `job_history_id` int(11) NOT NULL AUTO_INCREMENT,
   `fk_job_id` int(11) NOT NULL,
   `type` int(11) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `fk_user_id` int(11) NOT NULL,
-  PRIMARY KEY (`job-history_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`job_history_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `job-history`
+-- Dumping data for table `job_history`
 --
 
-LOCK TABLES `job-history` WRITE;
-/*!40000 ALTER TABLE `job-history` DISABLE KEYS */;
-/*!40000 ALTER TABLE `job-history` ENABLE KEYS */;
+LOCK TABLES `job_history` WRITE;
+/*!40000 ALTER TABLE `job_history` DISABLE KEYS */;
+INSERT INTO `job_history` VALUES (1,1,1,'2018-05-26 13:00:26','2018-05-26 13:00:26',1);
+/*!40000 ALTER TABLE `job_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -77,12 +81,12 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `created` datetime DEFAULT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `email` varchar(255) DEFAULT NULL,
-  `last_updated` datetime DEFAULT NULL,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `type` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,6 +95,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'2018-05-26 12:59:56','killesk@gmail.com','2018-05-26 12:59:56',1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -103,4 +108,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-05-21 15:10:59
+-- Dump completed on 2018-05-26 15:01:26
