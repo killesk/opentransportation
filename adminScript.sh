@@ -40,19 +40,21 @@ var_registry_port=5000
 function start() {
   	printf "#####################start()\n"
   	startDatabase	
-	compileAndPackageProject
-	buildServerDockerImage
-	startServer
+	
+	#java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=5005,suspend=n -jar  ./server/target/server-1.0.0-SNAPSHOT.jar
+	#compileAndPackageProject
+	#buildServerDockerImage
+	#startServer
 }
 
 function stop() {
   	printf "#####################stop()\n"
   	printf "Stopping mysql\n"  
   	docker stop $var_docker_name_mysql
-	server_container_id=$(docker ps -aqf "name=$var_docker_name_server")
-  	printf "Stopping and removing server from docker containerid[$server_container_i]"  
-	docker stop $server_container_id
-	docker rm -f  $server_container_id
+	#server_container_id=$(docker ps -aqf "name=$var_docker_name_server")
+  	#printf "Stopping and removing server from docker containerid[$server_container_i]"  
+	#docker stop $server_container_id
+	#docker rm -f  $server_container_id
 }
 
 function restart() {
