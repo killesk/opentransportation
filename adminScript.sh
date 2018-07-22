@@ -38,7 +38,7 @@ var_registry_port=5000
 #-------------------------------------- Methods ----------------------------------------#
 
 function start() {
-  	printf "\n\n\n\n\n\n\n#####################start()\n\n\n\n\n\n\n\n"
+  	printf "#####################start()\n"
   	startDatabase	
 	compileAndPackageProject
 	buildServerDockerImage
@@ -46,11 +46,13 @@ function start() {
 }
 
 function stop() {
-  	printf "\n\n\n\n\n\n\n#####################stop()\n\n\n\n\n\n\n\n"
+  	printf "#####################stop()\n"
   	printf "Stopping mysql\n"  
   	docker stop $var_docker_name_mysql
-  	docker rm -f $var_docker_name_server	
-	clean
+	server_container_id=$(docker ps -aqf "name=$var_docker_name_server")
+  	printf "Stopping and removing server from docker containerid[$server_container_i]"  
+	docker stop $server_container_id
+	docker rm -f  $server_container_id
 }
 
 function restart() {
@@ -64,7 +66,7 @@ function_exists() {
 }
 
 function startDatabase() {
-  	printf "\n\n\n\n\n\n\n#####################startDatabase()\n\n\n\n\n\n\n\n"
+  	printf "#####################startDatabase()\n"
   	loopTime=1
   	container_id=$(docker run \
     	-e MYSQL_ROOT_PASSWORD=$var_mysql_root_password \
@@ -91,18 +93,13 @@ function startDatabase() {
 	docker exec -i $var_docker_name_mysql mysql -u$var_mysql_user -p$var_mysql_password < $var_mysql_data_dump_file_name  $var_mysql_database
 }
 
-function clean() {
-  	printf "\n\n\n\n\n\n\n#####################clean()\n\n\n\n\n\n\n\n"
-	docker rmi -f $var_docker_image_server_image
-}
-
 function compileAndPackageProject() {
-  	printf "\n\n\n\n\n\n\n#####################compileAndPackageProject()\n\n\n\n\n\n\n\n"
+  	printf "#####################compileAndPackageProject()\n"
 	mvn compile package
 }
 
 function buildServerDockerImage() {
-  	printf "\n\n\n\n\n\n\n#####################buildServerDockerImage()\n\n\n\n\n\n\n\n"
+  	printf "#####################buildServerDockerImage()\n"
 	cd ./server
 	mvn clean install package
 	docker build -t $var_docker_image_server_image .
@@ -110,7 +107,7 @@ function buildServerDockerImage() {
 }
 
 function startServer() {
-  	printf "\n\n\n\n\n\n\n#####################startServer()\n\n\n\n\n\n\n\n\n"
+  	printf "#####################startServer()\n"
 	container_id=$(docker run -d --name $var_docker_name_server $var_docker_image_server_image:$var_docker_name_server_version)
   	printf "server container ID $container_id \n"
 }
